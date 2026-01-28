@@ -1,8 +1,5 @@
 import org.junit.jupiter.api.Test;
-
 import java.awt.*;
-import java.awt.image.ConvolveOp;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class Volvo240Test {

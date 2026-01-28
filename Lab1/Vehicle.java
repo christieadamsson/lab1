@@ -1,13 +1,13 @@
 import java.awt.*;
-// Varför ska vissa vara final? IntellIJ sa åt oss att ändra till det.
+
 public abstract class Vehicle implements Movable{
-    private final double enginePower; // Engine power of the vehicle
-    private double currentSpeed; // The current speed of vehicle
-    private Color color; // Color of the vehicle
-    private final String modelName; // The vehicle model name
+    private final double enginePower;
+    private double currentSpeed;
+    private Color color;
+    private final String modelName;
     private double x;
     private double y;
-    private Direction direction; // enum direction filen
+    private Direction direction;
 
 
     public Vehicle(double power, double speed, Color clr, String name) {
@@ -17,7 +17,7 @@ public abstract class Vehicle implements Movable{
         this.modelName = name;
         this.x = 0;
         this.y = 0;
-        this.direction = Direction.NORTH; // Startar mot Norr
+        this.direction = Direction.NORTH; // starts facing north
     }
 
     public double getEnginePower() {
