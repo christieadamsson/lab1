@@ -25,8 +25,9 @@ public abstract class Vehicle implements Movable{
     }
 
     protected void setCurrentSpeed(double speed) {
-        this.currentSpeed = speed;
+        this.currentSpeed = Math.max(0, Math.min(speed, getEnginePower()));
     }
+
     public double getCurrentSpeed() {
         return currentSpeed;
     }
@@ -51,52 +52,59 @@ public abstract class Vehicle implements Movable{
         currentSpeed = 0;
     }
 
+    public double getX() {
+        return x; }
+
+    public double getY() {
+        return y; }
+
+    public Direction getDirection() {
+        return direction; }
+
     protected abstract void incrementSpeed(double amount);
     protected abstract void decrementSpeed(double amount);
     protected abstract double speedFactor();
 
-    // TODO fix this method according to lab pm
     public void gas(double amount) {
-        incrementSpeed(amount);
+        if (amount>=0 && amount<=1){
+            incrementSpeed(amount);
+        }
     }
 
-    // TODO fix this method according to lab pm
     public void brake(double amount) {
-        decrementSpeed(amount);
+        if (amount>=0 && amount<=1){
+            decrementSpeed(amount);
+        }
     }
 
     @Override
     public void move() {
-        switch (direction) {
-            case NORTH -> y += getCurrentSpeed();
-            case EAST  -> x += getCurrentSpeed();
-            case SOUTH -> y -= getCurrentSpeed();
-            case WEST  -> x -= getCurrentSpeed();
+        switch (this.direction) {
+            case NORTH -> this.y += this.currentSpeed;
+            case EAST  -> this.x += this.currentSpeed;
+            case SOUTH -> this.y -= this.currentSpeed;
+            case WEST  -> this.x -= this.currentSpeed;
         }
     }
 
     @Override
     public void turnLeft() {
-        direction = switch (direction) {
-            case NORTH -> Direction.WEST;
-            case WEST  -> Direction.SOUTH;
-            case SOUTH -> Direction.EAST;
-            case EAST  -> Direction.NORTH;
+        switch (this.direction) {
+            case NORTH -> this.direction = Direction.WEST;
+            case WEST  -> this.direction = Direction.SOUTH;
+            case SOUTH -> this.direction = Direction.EAST;
+            case EAST  -> this.direction = Direction.NORTH;
         };
     }
 
     @Override
     public void turnRight() {
-        direction = switch (direction) {
-            case NORTH -> Direction.EAST;
-            case EAST  -> Direction.SOUTH;
-            case SOUTH -> Direction.WEST;
-            case WEST  -> Direction.NORTH;
+        switch (this.direction) {
+            case NORTH -> this.direction = Direction.EAST;
+            case EAST  -> this.direction = Direction.SOUTH;
+            case SOUTH -> this.direction = Direction.WEST;
+            case WEST  -> this.direction = Direction.NORTH;
         };
     }
 
-    // Getters för att Main ska kunna se var vi är
-    public double getX() { return x; }
-    public double getY() { return y; }
-    public Direction getDirection() { return direction; }
 }

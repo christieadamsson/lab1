@@ -3,20 +3,25 @@ public class Main {
         Volvo240 myVolvo = new Volvo240();
         Saab95 mySaab = new Saab95();
 
-        // Testa att starta och gasa
+        // Test for starting, gas, move, turnleft
         myVolvo.startEngine();
         myVolvo.gas(0.5);
+        myVolvo.move();
+        myVolvo.turnLeft();
+        myVolvo.move();
 
         mySaab.startEngine();
         mySaab.setTurboOn();
         mySaab.gas(0.5);
 
-        // Kontrollerar resultatet
-        System.out.println(myVolvo.getModelName() + " fart: " + myVolvo.getCurrentSpeed());
+        // result
+        System.out.println(myVolvo.getModelName() + " fart: " + myVolvo.getCurrentSpeed() + " position: " + myVolvo.getX() + myVolvo.getY() + " direction " + myVolvo.getDirection());
         System.out.println(mySaab.getModelName() + " fart: " + mySaab.getCurrentSpeed());
 
-        // Test för att se att vi inte kan nå privata variabler
+        // testing if we can reach private variables
         // myVolvo.currentSpeed = 100;
+        // works fine
+
         Vehicle v = new Volvo240();
     }
 }

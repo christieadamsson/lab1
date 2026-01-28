@@ -1,7 +1,7 @@
 import java.awt.*;
 
 public abstract class Car extends Vehicle {
-    private int nrDoors; // Number of doors on the car
+    private final int nrDoors; // Number of doors on the car
 
     public Car(double power, double speed, Color clr, String name, int doors) {
         super(power, speed, clr, name);
