@@ -11,7 +11,7 @@ abstract public class Truck extends Vehicle{
 
     public void gas(double amount) {
         if (!isSafeForDriving()) return;
-        super.gas(amount); // ✅ då får du 0..1-checken i Vehicle
+        super.gas(amount);
     }
 
 

@@ -58,6 +58,11 @@ public abstract class Vehicle implements Movable{
     public double getY() {
         return y; }
 
+    protected void setPosition(double x, double y){ //för labb 2
+        this.x = x;
+        this.y = y;
+    }
+
     public Direction getDirection() {
         return direction; }
 
