@@ -1,16 +1,14 @@
-
-
 import javax.crypto.Mac;
 import java.awt.*;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 
-public class CarTransport extends Truck {
+public class CarTransport extends Truck implements Adds<Car> {
 
     private boolean rampDown;
     private static final int MaxCars = 6;
-    private Deque<Car> loadedCars = new ArrayDeque<>(); //kolla upp overloads osv, static dynamic;
+    private Deque<Car> loadedCars = new ArrayDeque<>();
 
 
     public CarTransport(){
@@ -18,9 +16,16 @@ public class CarTransport extends Truck {
     }
 
 
-    public void lowerRamp(){
-        if(getCurrentSpeed() !=0) return;
-        rampDown = true;
+    public void lowerRamp() {
+        if (getCurrentSpeed() == 0) {
+            rampDown = true;
+        }
+    }
+
+    public void raiseRamp(){
+        if(getCurrentSpeed() == 0) {
+            rampDown = false;
+        }
     }
 
     private boolean closeEnough(Car car){
@@ -31,37 +36,56 @@ public class CarTransport extends Truck {
         return distance < 1;
     }
 
-    public void addCar(Car car) {
-        if (loadedCars.size() < MaxCars && closeEnough(car) && rampDown) {
-            loadedCars.push(car);
-        }
-    }
 
     public void removeCar(){
-            if(rampDown){
+            if(getCurrentSpeed() == 0 && rampDown && !loadedCars.isEmpty()){
                 Car removedCar = loadedCars.pop();
-                removedCar.setPosition(this.getX()-1, this.getY()-1);
+                removedCar.setPosition(this.getX(), this.getY()-1);
             }
+    }
+
+    @Override
+    public void add(Car car) {
+        if (getCurrentSpeed() == 0 && loadedCars.size() < MaxCars && closeEnough(car) && rampDown) {
+            car.stopEngine();
+            loadedCars.push(car);
+            car.setPosition(this.getX(), this.getY());
+        }
     }
 
     @Override
     protected boolean isSafeForDriving() {
         return !rampDown;
-    } //check för om rampDown är false
-
-    @Override
-    protected void incrementSpeed(double amount) {
-
     }
 
     @Override
+    protected void incrementSpeed(double amount) {
+        double newSpeed = Math.min(getCurrentSpeed() + speedFactor() * amount, getEnginePower());
+        if (newSpeed > getCurrentSpeed()) {
+            setCurrentSpeed(newSpeed);
+        }
+    }
+    @Override
     protected void decrementSpeed(double amount) {
-
+        double newSpeed = Math.max(getCurrentSpeed() - speedFactor() * amount, 0);
+        if (newSpeed < getCurrentSpeed()) {
+            setCurrentSpeed(newSpeed);
+        }
     }
 
     @Override
     protected double speedFactor() {
-        return 0;
+        return 0.01*getEnginePower();
+    }
+
+    @Override
+    public void move(){
+        if (isSafeForDriving()) {
+            super.move();
+            for (Car car : loadedCars) {
+                car.setPosition(this.getX(), this.getY());
+            }
+        }
     }
 
 }

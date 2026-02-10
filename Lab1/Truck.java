@@ -9,6 +9,7 @@ abstract public class Truck extends Vehicle{
 
     protected abstract boolean isSafeForDriving();
 
+    @Override
     public void gas(double amount) {
         if (!isSafeForDriving()) return;
         super.gas(amount);

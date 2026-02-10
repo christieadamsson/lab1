@@ -9,8 +9,10 @@ public class Scania extends Truck {
 
 }
     public double getRampAngle() {
+
         return rampAngle;
     }
+
     public void raiseRampAngle(double angle) {
         if (angle <0) return; // kan ej anta negativ vinkel
         if(getCurrentSpeed() !=0) return; //kan ej ändra när den kör
@@ -40,20 +42,27 @@ public class Scania extends Truck {
 
     @Override
     protected double speedFactor() {
-        return 1;
-    } //ska speedfactor vara 1 här?
+        return 0.01*getEnginePower();
+    }
 
     @Override
     protected void incrementSpeed(double amount) {
-
+        double newSpeed = Math.min(getCurrentSpeed() + speedFactor() * amount, getEnginePower());
+        if (newSpeed > getCurrentSpeed()) {
+            setCurrentSpeed(newSpeed);
+        }
     }
     @Override
     protected void decrementSpeed(double amount) {
-
+        double newSpeed = Math.max(getCurrentSpeed() - speedFactor() * amount, 0);
+        if (newSpeed < getCurrentSpeed()) {
+            setCurrentSpeed(newSpeed);
+        }
     }
 
     @Override
     protected boolean isSafeForDriving() {
+
         return rampAngle == 0;
     }
 
