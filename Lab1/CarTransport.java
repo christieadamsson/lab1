@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 
 public class CarTransport extends Truck implements Adds<Car> {
-
+    private UpAndDownRamp ramp;
     private boolean rampDown;
     private static final int MaxCars = 6;
     private Deque<Car> loadedCars = new ArrayDeque<>();
@@ -18,19 +18,19 @@ public class CarTransport extends Truck implements Adds<Car> {
 
     public void lowerRamp() {
         if (getCurrentSpeed() == 0) {
-            rampDown = true;
+            ramp.lowerRamp();
         }
     }
 
     public void raiseRamp(){
         if(getCurrentSpeed() == 0) {
-            rampDown = false;
+            ramp.raiseRamp();
         }
     }
 
     private boolean closeEnough(Car car){
         double dx = (car.getX() - this.getX());
-        double dy = (car.getX()- this.getX());
+        double dy = (car.getY()- this.getY());
 
         double distance = Math.sqrt((dx*dx) + (dy*dy));
         return distance < 1;
@@ -38,7 +38,7 @@ public class CarTransport extends Truck implements Adds<Car> {
 
 
     public void removeCar(){
-            if(getCurrentSpeed() == 0 && rampDown && !loadedCars.isEmpty()){
+            if(getCurrentSpeed() == 0 && ramp.isRampDown() && !loadedCars.isEmpty()){
                 Car removedCar = loadedCars.pop();
                 removedCar.setPosition(this.getX(), this.getY()-1);
             }
@@ -46,7 +46,7 @@ public class CarTransport extends Truck implements Adds<Car> {
 
     @Override
     public void add(Car car) {
-        if (getCurrentSpeed() == 0 && loadedCars.size() < MaxCars && closeEnough(car) && rampDown) {
+        if (getCurrentSpeed() == 0 && loadedCars.size() < MaxCars && closeEnough(car) && ramp.isRampDown()) {
             car.stopEngine();
             loadedCars.push(car);
             car.setPosition(this.getX(), this.getY());
@@ -55,7 +55,7 @@ public class CarTransport extends Truck implements Adds<Car> {
 
     @Override
     protected boolean isSafeForDriving() {
-        return !rampDown;
+        return ramp.isSafeForDriving();
     }
 
     @Override
